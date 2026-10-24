@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Board 2027 Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef3f8;--grid:#d9e3ee;--card:#fff;--ink:#14213d;--mute:#5d6b82;--line:#d3dce8;--m:#2b59c3;--s:#1f8a5b;--h:#c96a12;--warn:#c43d4b;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121a2b;--grid:#1c2740;--card:#1a2338;--ink:#e8eefb;--mute:#97a5c0;--line:#2c3a58;--m:#7ea2ff;--s:#4fcf93;--h:#f0a05a;--warn:#ff7d8a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121a2b;--grid:#1c2740;--card:#1a2338;--ink:#e8eefb;--mute:#97a5c0;--line:#2c3a58;--m:#7ea2ff;--s:#4fcf93;--h:#f0a05a;--warn:#ff7d8a;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;color:var(--ink);font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.45;min-height:100vh}
+main{max-width:560px;margin:0 auto;padding:16px 14px 60px}
+h1{font-size:26px;margin:0;font-weight:800;letter-spacing:-.5px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.sub{color:var(--mute);font-size:14px;margin:2px 0 0}
+.tbtn{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:6px 10px;font:inherit;font-size:13px;cursor:pointer}
+.hero{background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:16px;margin:14px 0;box-shadow:4px 4px 0 var(--ink)}
+.days{display:flex;align-items:baseline;gap:8px}
+.days b{font-size:64px;line-height:1;font-weight:800;letter-spacing:-3px}
+.days span{font-size:16px;color:var(--mute)}
+.dt{font-size:13px;color:var(--mute);margin-top:6px}
+.dt input{font:inherit;font-size:13px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:2px 6px}
+.bar{height:12px;background:var(--bg);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ink);width:0;transition:width .3s}
+.row{display:flex;justify-content:space-between;font-size:14px;margin:12px 0 5px;font-weight:600}
+.where{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+.where h2,.sec h2{font-size:16px;margin:0 0 8px}
+.nx{display:flex;gap:10px;align-items:center;padding:8px 0;border-top:1px dashed var(--line);font-size:14px;cursor:pointer;background:none;border-left:0;border-right:0;border-bottom:0;width:100%;text-align:left;color:inherit;font-family:inherit}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.nx em{font-style:normal;color:var(--mute);font-size:12px;display:block}
+.tabs{display:flex;gap:6px;margin-bottom:10px}
+.tab{flex:1;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:9px 4px;font:inherit;font-weight:600;font-size:14px;cursor:pointer}
+.tab small{display:block;font-weight:400;color:var(--mute);font-size:12px}
+.tab[aria-selected="true"]{border:2px solid var(--c);box-shadow:3px 3px 0 var(--c)}
+.ch{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.ch.full{opacity:.7}
+.ct{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:15px;font-weight:600}
+.ct button{background:none;border:0;font-size:20px;cursor:pointer;color:var(--mute);padding:0 2px}
+.ct button.on{color:var(--warn)}
+.ct u{text-decoration:none;color:var(--mute);font-weight:400;font-size:12px;display:block}
+.steps{display:flex;gap:6px;margin-top:8px}
+.st{flex:1;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:9px;padding:8px 2px;font:inherit;font-size:13px;cursor:pointer;min-height:40px}
+.st[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:#fff}
+:root[data-theme="dark"] .st[aria-pressed="true"]{color:#101828}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .st[aria-pressed="true"]{color:#101828}}
+.tip{font-size:12px;color:var(--mute);margin-top:14px;text-align:center}
+.rs{background:none;border:0;color:var(--mute);text-decoration:underline;font:inherit;font-size:12px;cursor:pointer;display:block;margin:10px auto 0}
+button:focus-visible,input:focus-visible{outline:3px solid var(--m);outline-offset:2px}
+</style>
+</head>
+<body>
+<main>
+<div class="top">
+<div><h1>Board 2027 Tracker</h1><p class="sub">Class 10 CBSE · Maths, Science, S.St</p></div>
+<button class="tbtn" id="theme" aria-label="Theme badlo">Theme</button>
+</div>
+
+<section class="hero" aria-label="Exam countdown">
+<div class="days"><b id="dn">0</b><span>din bache hain</span></div>
+<div class="dt">Exam shuru (approx): <input type="date" id="ed"></div>
+<div class="row"><span>Poori taiyari</span><span id="op">0%</span></div>
+<div class="bar"><i id="ob"></i></div>
+</section>
+
+<section class="where" aria-label="Ab kahan ho">
+<h2>Ab kahan ho, aage kya karna hai</h2>
+<div id="next"></div>
+</section>
+
+<div class="tabs" role="tablist" id="tabs"></div>
+<section class="sec" id="list"></section>
+
+<p class="tip">Har chapter ke 3 step: Padha, Practice, Revise. Tara = kamzor chapter.</p>
+<button class="rs" id="reset">Sab reset karo</button>
+</main>
+
+<script>
+var SUBJ=[
+{id:"m",name:"Maths",color:"var(--m)",ch:["Real Numbers","Polynomials","Pair of Linear Equations","Quadratic Equations","Arithmetic Progressions","Triangles","Coordinate Geometry","Intro to Trigonometry","Applications of Trigonometry","Circles","Areas Related to Circles","Surface Areas and Volumes","Statistics","Probability"]},
+{id:"s",name:"Science",color:"var(--s)",ch:["Chemical Reactions","Acids, Bases and Salts","Metals and Non-metals","Carbon and its Compounds","Life Processes","Control and Coordination","How do Organisms Reproduce","Heredity","Light","Human Eye","Electricity","Magnetic Effects of Current","Our Environment"]},
+{id:"h",name:"S.St",color:"var(--h)",ch:["History: Nationalism in Europe","History: Nationalism in Indo-China","History: Nationalism in India","History: Global World","History: Industrialisation","History: Print Culture","Geo: Resources and Development","Geo: Forest and Wildlife","Geo: Water Resources","Geo: Agriculture","Geo: Minerals and Energy","Geo: Manufacturing Industries","Geo: Lifelines of Economy","Civics: Power Sharing","Civics: Federalism","Civics: Gender, Religion, Caste","Civics: Political Parties","Civics: Outcomes of Democracy","Eco: Development","Eco: Sectors of Economy","Eco: Money and Credit","Eco: Globalisation","Eco: Consumer Rights"]}
+];
+var STEPS=["Padha","Practice","Revise"];
+var KEY="board2027-v1";
+var S={done:{},weak:{},date:"2027-02-17",cur:"m"};
+try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&typeof p==="object")S=Object.assign(S,p)}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function k(si,ci,st){return si+"-"+ci+"-"+st}
+function cnt(sub,ci){var n=0;for(var t=0;t<3;t++)if(S.done[k(sub.id,ci,t)])n++;return n}
+function pct(sub){var d=0;sub.ch.forEach(function(c,i){d+=cnt(sub,i)});return Math.round(d/(sub.ch.length*3)*100)}
+function el(id){return document.getElementById(id)}
+
+function render(){
+  var tot=0,all=0;
+  SUBJ.forEach(function(s){s.ch.forEach(function(c,i){tot+=cnt(s,i);all+=3})});
+  var op=Math.round(tot/all*100);
+  el("op").textContent=op+"%";el("ob").style.width=op+"%";
+  el("ed").value=S.date;
+  var left=Math.ceil((new Date(S.date+"T00:00:00")-new Date())/864e5);
+  el("dn").textContent=isNaN(left)?"-":Math.max(left,0);
+
+  var nx=el("next");nx.innerHTML="";
+  SUBJ.forEach(function(s){
+    var idx=-1;
+    for(var i=0;i<s.ch.length;i++){if(cnt(s,i)<3){idx=i;break}}
+    var b=document.createElement("button");b.className="nx";
+    var txt;
+    if(idx<0){txt="<strong>"+s.name+"</strong><em>Sab chapter poore. Bahut badhiya!</em>"}
+    else{
+      var c=cnt(s,idx);
+      txt="<strong>"+s.name+": "+s.ch[idx]+"</strong><em>Ab karna hai: "+STEPS[c]+" ("+pct(s)+"% poora)</em>";
+    }
+    b.innerHTML='<span class="dot" style="background:'+s.color+'"></span><span>'+txt+"</span>";
+    b.onclick=function(){S.cur=s.id;save();render();el("tabs").scrollIntoView({behavior:"smooth"})};
+    nx.appendChild(b);
+  });
+
+  var tb=el("tabs");tb.innerHTML="";
+  SUBJ.forEach(function(s){
+    var b=document.createElement("button");b.className="tab";b.setAttribute("role","tab");
+    b.setAttribute("aria-selected",S.cur===s.id);b.style.setProperty("--c",s.color);
+    b.innerHTML=s.name+"<small>"+pct(s)+"%</small>";
+    b.onclick=function(){S.cur=s.id;save();render()};
+    tb.appendChild(b);
+  });
+
+  var sub=SUBJ.filter(function(s){return s.id===S.cur})[0];
+  var ls=el("list");ls.innerHTML="";
+  sub.ch.forEach(function(name,i){
+    var d=document.createElement("div");d.className="ch"+(cnt(sub,i)===3?" full":"");
+    d.style.setProperty("--c",sub.color);
+    var wk=S.weak[sub.id+"-"+i];
+    d.innerHTML='<div class="ct"><span>'+name+'<u>Chapter '+(i+1)+' · '+cnt(sub,i)+'/3 step</u></span><button class="'+(wk?"on":"")+'" aria-label="Kamzor chapter mark karo" aria-pressed="'+!!wk+'">'+(wk?"\u2605":"\u2606")+'</button></div><div class="steps"></div>';
+    d.querySelector(".ct button").onclick=function(){S.weak[sub.id+"-"+i]=!wk;save();render()};
+    var sp=d.querySelector(".steps");
+    STEPS.forEach(function(st,t){
+      var on=!!S.done[k(sub.id,i,t)];
+      var b=document.createElement("button");b.className="st";b.setAttribute("aria-pressed",on);
+      b.textContent=(on?"\u2713 ":"")+st;
+      b.onclick=function(){S.done[k(sub.id,i,t)]=!on;save();render()};
+      sp.appendChild(b);
+    });
+    ls.appendChild(d);
+  });
+}
+
+el("ed").onchange=function(){if(this.value){S.date=this.value;save();render()}};
+el("reset").onclick=function(){if(confirm("Saari progress hat jayegi. Pakka reset karna hai?")){S.done={};S.weak={};save();render()}};
+el("theme").onclick=function(){
+  var r=document.documentElement;
+  var dark=r.getAttribute("data-theme")==="dark"||(!r.getAttribute("data-theme")&&matchMedia("(prefers-color-scheme: dark)").matches);
+  r.setAttribute("data-theme",dark?"light":"dark");
+};
+render();
+</script>
+</body>
+</html>
